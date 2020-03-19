@@ -31,26 +31,106 @@ function main()
 	styleSheet.type = "text/css";
 	styleSheet.innerText = styles;
 	document.head.appendChild(styleSheet);
+	
+// 	tips = []
 
-// 	selectors = ["#hplogo",".gb_g:contains(\"Images\")","[name=\"q\"]","#sbtc > button"]
+	for (let i = 0; i < data.data.structure.steps.length; i++){
 
-	// Create Tip Element
-	tip = document.createElement("div");
-	tip.innerHTML = tipHtml;
-    
-//     for (step in jsn.data.structure.steps){
+		step = data.data.structure.steps[i]
+		if(step.if == "eol0")
+		    break
 
-//     	selector = step.action.selector
-//     	elem = document.querySelector(selector);
-//     	elem.appendChild(tip);
+		// Create Tip Element
+        tip = document.createElement("div");
+        tip.innerHTML = tipHtml;
 
+        // update content
+		elem_divs = tip.getElementsByTagName("div");
+		for (var j=0; j<elem_divs.length; j++)
+		{
+			var curr_div = elem_divs[j];
+			if (curr_div.getAttribute("data-iridize-id") == "content")
+				curr_div.innerHTML = step.action.contents['#content'];
+		}
+
+		 // catch element
+		elem = null;
+
+		if (step.action.selector.includes(".gb_g")){
+			all_gb_g = document.querySelectorAll('.gb_g');
+			for (let i = 0; i < all_gb_g.length; i++)
+				if (all_gb_g[i].text == "Images")
+					elem = all_gb_g[i];
+		}
+        else{
+		    elem = document.querySelector(step.action.selector);
+        }
+       
+		// add a new child to it
+        elem.appendChild(tip);
+	}
+
+// 	// step 1: Logo
+
+// 	step = data.data.structure.steps[0]
+
+// 	// update content
+//     tip_divs = tips[0].getElementsByTagName("div");
+//     for (var i = 0; i < tip_divs.length; i++)
+//     {
+//         var curr_div = tip_divs[i];
+//         if (curr_div.getAttribute("data-iridize-id") == "content")
+//             curr_div.innerHTML = step.action.contents['#content'];
 //     }
-	// step 1: Logo
-	step = data.data.structure.steps[0]
-    elem = document.querySelector(step.action.selector);
-	elem.appendChild(tip);
+
+//     elem = document.querySelector(step.action.selector);// catch element
+// 	elem.appendChild(tips[0]);// add a new child to it
+
+    // step 2: Images button
+    
+//     step = data.data.structure.steps[1]
+
+//     // update content
+//     tip_divs = tips[1].getElementsByTagName("div");
+//     for (var i = 0; i < tip_divs.length; i++)
+//     {
+//         var curr_div = tip_divs[i];
+//         if (curr_div.getAttribute("data-iridize-id") == "content")
+//             curr_div.innerHTML = step.action.contents['#content'];
+//     }
+
+//     elem = null;
+//     all_gb_g = document.querySelectorAll('.gb_g');
+//     for (let i = 0; i < all_gb_g.length; i++)
+//         if (all_gb_g[i].text == "Images")
+//     	    elem = all_gb_g[i];
+
+//     // add a new child to it
+// 	elem.appendChild(tips[1]);
+
+    //elem = document.querySelector(step.action.selector); // when passing '.gb_g:contains("Images")' it throws an error so I had to do it differently
+
+
+// // step 3: Search Bar
+
+//     step = data.data.structure.steps[2]
+
+//  // update content
+//     tip_divs = tips[2].getElementsByTagName("div");
+//     for (var i = 0; i < tip_divs.length; i++)
+//     {
+//         var curr_div = tip_divs[i];
+//         if (curr_div.getAttribute("data-iridize-id") == "content")
+//             curr_div.innerHTML = step.action.contents['#content'];
+//     }
+
+//     elem = document.getElementsByName('q')
+
+//     // add a new child to it
+// 	elem.appendChild(tips[2]);
 
 }
+
 
 
 const tipHtml = `<div role="region" tabindex="999" aria-label="Hover Tip" class="ir-hoverTip">
@@ -1900,4 +1980,5 @@ data = {
     }
 }
 
+clear()
 main()
