@@ -60,8 +60,13 @@ function main()
 		 // catch element
 		elem = null;
 
+		// Step 1 - Logo
+        if(step.action.selector.includes("logo")){
+		    elem = document.querySelector(step.action.selector);    
+        }
+
         // Step 2 - Images
-		if (step.action.selector.includes(".gb_g")){
+		else if (step.action.selector.includes(".gb_g")){
 
 			all_gb_g = document.querySelectorAll('.gb_g');
 			for (let i = 0; i < all_gb_g.length; i++)
@@ -72,6 +77,9 @@ function main()
         // Step 4 - Search Button
 		else if (step.action.selector.includes("#sbtc")){
 		    elem = document.getElementsByName('btnK')[0];
+		    elem.parentElement.insertBefore(tip,elem.parentElement.firstElementChild);
+		    tips.push(tip)
+		    continue
 		}
 
 		// Step 3 - Search Bar
