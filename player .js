@@ -32,10 +32,13 @@ function main()
 	styleSheet.innerText = styles;
 	document.head.appendChild(styleSheet);
 
+	tips=[]
+
 	for (let i = 0; i < data.data.structure.steps.length; i++){
         
-        if(i!=3)continue//TESTING
+//         if(i!=0)continue//TESTING
 
+        // Step - Termination
 		step = data.data.structure.steps[i]
 		if(step.id == "eol0")
 		    break
@@ -43,6 +46,7 @@ function main()
 		// Create Tip Element
         tip = document.createElement("div");
         tip.innerHTML = tipHtml;
+        tip.style.zIndex = 1000
 
         // update tip content
 		elem_divs = tip.getElementsByTagName("div");
@@ -68,17 +72,22 @@ function main()
         // Step 4 - Search Button
 		else if (step.action.selector.includes("#sbtc")){
 		    elem = document.getElementsByName('btnK')[0];
-
 		}
 
 		// Step 3 - Search Bar
 // 		elem = document.getElementsByClassName('RNNXgb')[0]// Step 4 - Search Button
         else{
-		    elem = document.querySelector(step.action.selector);
+		    elem = document.querySelector(step.action.selector);    
+		    elem.parentElement.appendChild(tip);
+		    tips.push(tip)
+		    continue
+
         }
        
 		// add a new child to it
-        elem.appendChild(tip);
+//         elem.parentElement.appendChild(tip);
+        elem.insertBefore(tip,elem.firstElementChild)
+        tips.push(tip)
 	}
 }
 
