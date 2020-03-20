@@ -36,7 +36,7 @@ function main()
 
 	for (let i = 0; i < data.data.structure.steps.length; i++){
         
-//         if(i!=0)continue//TESTING
+//         if(i!=3)continue//TESTING
 
         // Step - Termination
 		step = data.data.structure.steps[i]
@@ -77,7 +77,7 @@ function main()
         // Step 4 - Search Button
 		else if (step.action.selector.includes("#sbtc")){
 		    elem = document.getElementsByName('btnK')[0];
-		    elem.parentElement.insertBefore(tip,elem.parentElement.firstElementChild);
+		    elem.parentElement.parentElement.parentElement.parentElement.parentElement.appendChild(tip);
 		    tips.push(tip)
 		    continue
 		}
