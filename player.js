@@ -3,6 +3,7 @@ elems = null;
 tourSteps = null;
 currStepIndex = 0;
 currIntervalProc = null;
+currIntervalProc2 = null
 finish = false;
 laterTimer = 1000;
 
@@ -111,22 +112,23 @@ function tour()
             else if (curr_span.getAttribute("data-iridize-role") == "stepsCount")
                 curr_span.innerText = tourSteps.length;
         }
-
         
         //e.parentElement.insertBefore(tip, e.parentElement.firstChild);
         e.parentElement.appendChild(tip);
-        return
+//         return
         currIntervalProc = setInterval(handleNext, tourStep.duration);
     }
 }
-
-function handleNext()
-{
-    if (currIntervalProc)
+function clearIntervalProc(){
+    if (currIntervalProc!=0)
     {
         clearInterval(currIntervalProc);
         currIntervalProc = null;
     }
+}
+function handleNext()
+{
+    clearIntervalProc();
 
     if (currStepIndex >= tourSteps.length)
         return;
@@ -141,13 +143,7 @@ function handleNext()
 
 function handlePrev()
 {
-    if (currIntervalProc)
-    {
-        clearInterval(currIntervalProc);
-        currIntervalProc = null;
-    }
-    if (currStepIndex < 0)
-        return;
+    clearIntervalProc();
 
     currStepIndex -= 1;
    
@@ -159,17 +155,15 @@ function handlePrev()
 function handleLater()
 {
     handleClose();
-    finish = false;
-    currIntervalProc = setInterval(tour, laterTimer);
+    finish = false
     currStepIndex = 0 //start from beginning
+    setTimeout(() => {  tour() }, laterTimer);
 }
 
 function handleClose(){
-	e.parentElement.removeChild(tip);
-	if(currIntervalProc){
-		clearInterval(currIntervalProc);
-		currIntervalProc = null;
-	}
+	 for (i = 0; i < elems.length; i++)
+        elems[i].parentElement.removeChild(tip);
+	clearIntervalProc();
 	finish = true
 }
 
