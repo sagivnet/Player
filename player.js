@@ -3,6 +3,8 @@ elems = null;
 tourSteps = null;
 currStepIndex = 0;
 currIntervalProc = null;
+finish = false;
+laterTimer = 1000;
 
 function main()
 {
@@ -58,7 +60,7 @@ function extractStepsFromJson(steps)
 
 function tour()
 {
-    
+    if(finish) return
     tip = document.createElement("div");
     tip.innerHTML = tipHtml;
     tourStep = tourSteps[currStepIndex];
@@ -66,6 +68,7 @@ function tour()
     if (tourStep.selector.includes("#sbtc")) {
         $("[name=\"btnK\"]")[1].name = "sbtc";
         tourStep.selector = "[name=\"sbtc\"]";
+        elems = $(tourStep.selector);
     }
     for (i = 0; i < elems.length; i++)
     {
@@ -106,17 +109,14 @@ function tour()
             if (curr_span.getAttribute("data-iridize-role") == "stepCount")
                 curr_span.innerText = tourStep.stepOrdinal;
             else if (curr_span.getAttribute("data-iridize-role") == "stepsCount")
-                curr_span.innerText = tourSteps.length
+                curr_span.innerText = tourSteps.length;
         }
 
-
-
-
-        currIntervalProc = setInterval(handleNext, tourStep.duration);
+        
         //e.parentElement.insertBefore(tip, e.parentElement.firstChild);
         e.parentElement.appendChild(tip);
-        if (currStepIndex == 3)
-            console.log(tip)
+        return
+        currIntervalProc = setInterval(handleNext, tourStep.duration);
     }
 }
 
@@ -127,22 +127,50 @@ function handleNext()
         clearInterval(currIntervalProc);
         currIntervalProc = null;
     }
-    currStepIndex += 1;
+
     if (currStepIndex >= tourSteps.length)
         return;
+
+    currStepIndex += 1;
+    
     for (i = 0; i < elems.length; i++)
         elems[i].parentElement.removeChild(tip);
+
     tour();
 }
 
 function handlePrev()
 {
-    
+    if (currIntervalProc)
+    {
+        clearInterval(currIntervalProc);
+        currIntervalProc = null;
+    }
+    if (currStepIndex < 0)
+        return;
+
+    currStepIndex -= 1;
+   
+    for (i = 0; i < elems.length; i++)
+        elems[i].parentElement.removeChild(tip);
+    tour();
 }
 
 function handleLater()
 {
-    
+    handleClose();
+    finish = false;
+    currIntervalProc = setInterval(tour, laterTimer);
+    currStepIndex = 0 //start from beginning
+}
+
+function handleClose(){
+	e.parentElement.removeChild(tip);
+	if(currIntervalProc){
+		clearInterval(currIntervalProc);
+		currIntervalProc = null;
+	}
+	finish = true
 }
 
 // TODO: 1. Finish tour function
@@ -164,6 +192,7 @@ styles = `
     display: inline-block;
 } */
 .ir-hoverTip{
+    z-index: 9999;
     /* bottom: -3px;
     /* border-top: 27px solid; */
     /* border-left: 16px inset transparent;
@@ -187,6 +216,7 @@ styles = `
 }
 /* Later Button */
 .later-btn{
+	 border-radius: 5px;
     border-width: 1px;
     /* padding-bottom: -34px; */
     display: inline-block;
@@ -204,6 +234,7 @@ styles = `
 
     background: #652a2a;
     color: lightgray;
+
 }
 /* Back Button*/
 .prev-btn{
@@ -223,7 +254,8 @@ styles = `
     overflow: hidden;
     text-overflow: ellipsis;
     /* max-width: 42px; */
-    top: -7px;
+     border-radius: 5px;
+
     
 }
 .showPrevBt{
@@ -245,7 +277,6 @@ styles = `
 
 /* Next Button */
 div.sttip div.tooltip div.stFooter .next-btn {
-    right: -33px;
     min-width: 26px;
     padding-right: 14px;
     padding-left: 14px;
@@ -261,6 +292,7 @@ div.sttip div.tooltip div.stFooter .next-btn {
     text-overflow: ellipsis;
     max-width: 42px;
     border-radius: 5px;
+
 }
 div.sttip div.tooltip div.popover-inner {
     
