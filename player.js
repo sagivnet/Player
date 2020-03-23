@@ -32,7 +32,6 @@ function tour()
     // Fixes a bug
     searchButtonPatch()
    
-    tourStep.placement = 'top'
     for (i = 0; i < elems.length; i++)
     {
         e = elems[i];
@@ -48,7 +47,7 @@ function tour()
         // Add tip to the document
         document.body.appendChild(tip);
 //         return
-//         if (i==2)return
+//         if (i==1)return
         // set a timer for current step
         currIntervalProc = setInterval(handleNext, tourStep.duration);
     }
@@ -126,9 +125,18 @@ function updateStepCount(){
 
 function AddClassesToTip(tip){
 	classes = tourStep.classes.split(' ');
-        for (i = 0; i < classes.length; i++)
-            tip.getElementsByClassName("tooltip")[0].classList.add(classes[i]);
+
+	for (i = 0; i < classes.length; i++){
+		if (tourStep == tourSteps[0] && classes[i]=="showPrevBt")// First doesnt need Back
+		    continue;
+    
+		tip.getElementsByClassName("tooltip")[0].classList.add(classes[i]);
+	}	    
+
+	if (tourStep == tourSteps[tourSteps.length-2])// Last doesnt need Next
+		 tip.getElementsByClassName("tooltip")[0].classList.add("hideNextBt");
 }
+		
 
 function fixPosition(tip){
     tipWidth =280
@@ -143,7 +151,7 @@ function fixPosition(tip){
 
         if (tourStep.placement == "right"){
         	if ((e.getBoundingClientRect().right + e.getBoundingClientRect().width) > window.innerWidth){
-        		tourStep.classes += ' ' + 'flap'
+        		tourStep.classes += ' ' + 'flap'                                                                             //TODO:
         	}
         	tip.style.left = (e.getBoundingClientRect().left + e.getBoundingClientRect().width) + "px";
         }
