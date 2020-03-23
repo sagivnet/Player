@@ -120,10 +120,24 @@ function tour()
 
         //e.parentElement.insertBefore(tip, e.parentElement.firstChild);
         //e.style.position = "relative";
-        e.parentElement.appendChild(tip);
+        //e.parentElement.appendChild(tip);
         //e.appendChild(tip);
+        tip.style.position = "absolute";
+        tip.style.top = e.getBoundingClientRect().top + "px";
+        tip.style.left = e.getBoundingClientRect().left + "px";
+        if (tourStep.placement == "right")
+            tip.style.left = (e.getBoundingClientRect().left + e.getBoundingClientRect().width) + "px";
+        else if (tourStep.placement == "left")
+            tip.style.left = (e.getBoundingClientRect().left - e.getBoundingClientRect().width) + "px";
+        else if (tourStep.placement == "top")
+            tip.style.top = (e.getBoundingClientRect().top - e.getBoundingClientRect().height) + "px";
+        else if (tourStep.placement == "bottom")
+            tip.style.top = (e.getBoundingClientRect().top + e.getBoundingClientRect().height) + "px";
+
+
+        document.body.appendChild(tip);
         
-        return
+        //return
         currIntervalProc = setInterval(handleNext, tourStep.duration);
     }
 }
@@ -143,8 +157,7 @@ function handleNext()
 
     currStepIndex += 1;
     
-    for (i = 0; i < elems.length; i++)
-        elems[i].parentElement.removeChild(tip);
+    removeTipChild();
 
     tour();
 }
@@ -155,8 +168,7 @@ function handlePrev()
 
     currStepIndex -= 1;
    
-    for (i = 0; i < elems.length; i++)
-        elems[i].parentElement.removeChild(tip);
+    removeTipChild();
     tour();
 }
 
@@ -169,10 +181,16 @@ function handleLater()
 }
 
 function handleClose(){
-	 for (i = 0; i < elems.length; i++)
-        elems[i].parentElement.removeChild(tip);
+    removeTipChild()
 	clearIntervalProc();
 	finish = true
+}
+
+function removeTipChild()
+{
+    for (i = 0; i < elems.length; i++)
+        document.body.removeChild(tip);
+        //elems[i].parentElement.removeChild(tip);
 }
 
 // TODO: 1. Finish tour function
