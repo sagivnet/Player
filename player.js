@@ -27,9 +27,12 @@ function tour()
     tip = document.createElement("div");
     tip.innerHTML = tipHtml;
     tourStep = tourSteps[currStepIndex];
+
+    elems = $(tourStep.selector);
     // Fixes a bug
     searchButtonPatch()
    
+    tourStep.placement = 'top'
     for (i = 0; i < elems.length; i++)
     {
         e = elems[i];
@@ -38,13 +41,14 @@ function tour()
         updateTipContent()
         // Update Step Count 
         updateStepCount()   
-        // Add Classes
-        AddClassesToTip(tip)
         // Fix Position
         fixPosition(tip)
+        // Add Classes
+        AddClassesToTip(tip)
         // Add tip to the document
         document.body.appendChild(tip);
 //         return
+//         if (i==2)return
         // set a timer for current step
         currIntervalProc = setInterval(handleNext, tourStep.duration);
     }
@@ -101,7 +105,7 @@ function extractStepsFromJson(steps)
 
 
 function searchButtonPatch(){
-	elems = $(tourStep.selector);
+	
     if (tourStep.selector.includes("#sbtc")) {
         $("[name=\"btnK\"]")[1].name = "sbtc";
         tourStep.selector = "[name=\"sbtc\"]";
@@ -127,22 +131,34 @@ function AddClassesToTip(tip){
 }
 
 function fixPosition(tip){
-
+    tipWidth =280
+    tipHeight = 150
 	tip.style.position = "absolute";
 
 	    tip.style.bottom = e.getBoundingClientRect().bottom + "px";
         tip.style.top = e.getBoundingClientRect().top + "px";
         tip.style.left = e.getBoundingClientRect().left + "px";
+        tip.style.right = e.getBoundingClientRect().right + "px";
          
 
-        if (tourStep.placement == "right")
-            tip.style.left = (e.getBoundingClientRect().left + e.getBoundingClientRect().width) + "px";
-        else if (tourStep.placement == "left")
-            tip.style.left = (e.getBoundingClientRect().left - e.getBoundingClientRect().width) + "px";
-        else if (tourStep.placement == "top")
-            tip.style.top = (e.getBoundingClientRect().top - e.getBoundingClientRect().height) + "px";
-        else if (tourStep.placement == "bottom")
-            tip.style.top = (e.getBoundingClientRect().top + e.getBoundingClientRect().height) + "px";
+        if (tourStep.placement == "right"){
+        	if ((e.getBoundingClientRect().right + e.getBoundingClientRect().width) > window.innerWidth){
+        		tourStep.classes += ' ' + 'flap'
+        	}
+        	tip.style.left = (e.getBoundingClientRect().left + e.getBoundingClientRect().width) + "px";
+        }
+            
+        else if (tourStep.placement == "left"){
+            tip.style.left = (e.getBoundingClientRect().left -tipWidth) + "px";
+        }
+            
+        else if (tourStep.placement == "top"){
+            tip.style.top = (e.getBoundingClientRect().top - tipHeight) + "px";
+        }
+            
+        else if (tourStep.placement == "bottom"){
+        	tip.style.top = (e.getBoundingClientRect().top  + e.getBoundingClientRect().height) + "px";
+        }
 }
 function clearIntervalProc(){
     if (currIntervalProc!=0)
