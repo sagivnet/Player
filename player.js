@@ -15,12 +15,28 @@ function main()
   
     steps = data.data.structure.steps;
     tourSteps = extractStepsFromJson(steps);
-    
-   
-    tourSteps.sort(function (a,b){
-        return a.stepOrdinal - b.stepOrdinal
-    })
+    tourSteps = sortTour([], null);
     tour();
+}
+
+function sortTour(newTourSteps, tStep)
+{
+    if (newTourSteps.length == tourSteps.length)
+        return newTourSteps;
+    if (newTourSteps.length == 0)
+        tStep = tourSteps[0];
+    else
+        tStep = findId(tStep.next);
+    newTourSteps.push(tStep);
+    return sortTour(newTourSteps, tStep);
+}
+
+function findId(id)
+{
+    for (i = 0; i < tourSteps.length; i++)
+        if (id == tourSteps[i].id)
+            return tourSteps[i];
+    return null;
 }
 
 function tour()
