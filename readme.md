@@ -6,29 +6,29 @@
 
 ## Features
 
-> Buttons
+- Buttons
 
-- Prev
-- Next
-- Remind Me Later
-- Close
+> Prev
+> Next
+> Remind Me Later
+> Close
 
-> Features
+- Features
 
-- Hide Show Button
-- Hide Next Button
+> Hide Show Button
+> Hide Next Button
 
 ## Useage 
 
 
-> Insert your json inside the variable 'data' in line:1 
+- Insert your json inside the variable 'data' in line:1 
 - Default is a simple Guide for google.com
 
 
-> Copy the script by pressing Ctrl+a Ctrl+c
+- Copy the script by pressing Ctrl+a Ctrl+c
 
 
-> Paste it in Devtools as a new snippet and run it 
+- Paste it in Devtools as a new snippet and run it 
 
 
 
