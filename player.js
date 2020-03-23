@@ -180,7 +180,6 @@ function fixPosition(tip){
                 tip.getElementsByClassName("later-btn")[0].style.left = "-" + (tipWidth/5) + "%";
                 tip.getElementsByClassName("prev-btn")[0].style.left = tipWidth/20 + "%";
                 tip.getElementsByClassName("next-btn")[0].style.left = tipWidth/20 + "%";
-                console.log(elem);
                 tip.getElementsByClassName("flap-text")[0].style.width = 20 + "px";
                 tip.getElementsByClassName("popover-content")[0].style.minWidth = window.innerWidth - e.getBoundingClientRect().left - e.getBoundingClientRect().width - (tipWidth/2) + "px";
 
